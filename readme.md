@@ -18,45 +18,78 @@ Mata Kuliah : Jaringan Komputer Lanjut
    Jawab : Menurut saya, NAT (Network Address Translation) teknologi yang memungkinkan beberapa perangkat di dalam jaringan lokal untuk menggunakan satu alamat IP publik saat berkomunikasi dengan internet. Dengan menggunakan NAT, alamat IP privat dari perangkat-perangkat di jaringan lokal dapat disembunyikan, dan mereka semua bisa mengakses internet dengan alamat IP publik yang sama. Menurut saya, NAT ini sangat berguna dalam menghemat penggunaan alamat IP publik, karena tidak semua perangkat membutuhkan alamat IP publik yang unik. 
 
 # CASED #
-![alt text](image.png)
+![alt text](<Topologi Jarkom lanjut shefia.png>)
 
-## PENJELASAN ##
-# Konfigurasi Topologi Jaringan Menggunakan RIP #
-Penjelasan Topologi
-Topologi ini terdiri dari 3 router dan 3 PC yang masing-masing terhubung ke router dengan subnet yang berbeda. Protokol yang digunakan untuk routing antar-router adalah RIP.
+# Konfigurasi Jaringan Antar Kampus (KJ, CR, KHI)
 
-# Komponen Utama #
-3 Router:
+## Deskripsi Proyek
 
-R1 KBJ
-R2 CR
-R3 KHI
+Proyek ini adalah konfigurasi jaringan untuk menghubungkan tiga kampus (KJ, CR, KHI) menggunakan router dan switch. Setiap kampus memiliki router yang terhubung ke internet dan jaringan lokal. Kampus KJ bertindak sebagai pusat, dengan IPIP Tunnel menghubungkan masing-masing kampus, Komunikasi jaringan antar kampus.
 
-# 3 PC yang terhubung pada setiap router dengan subnet berbeda: #
 
-PC dengan subnet 192.168.8.1/24 terhubung ke R3 KHI
-PC dengan subnet 192.168.20.1/24 terhubung ke R1 KBJ
-PC dengan subnet 192.168.10.1/24 terhubung ke R2 CR
+## Topologi Jaringan
 
-# Subnet dan Interface #
-# Router R1 KBJ #
-Ethernet 2: Terhubung ke PC dengan subnet 192.168.20.1/24
-Ethernet 3: Terhubung ke jaringan 23.23.23.1, menghubungkan ke R3 KHI
-Ethernet 4: Terhubung ke jaringan 34.34.34.1, menghubungkan ke R2 CR
-# Router R2 CR #
-Ethernet 2: Terhubung ke PC dengan subnet 192.168.10.1/24
-Ethernet 3: Terhubung ke jaringan 20.20.20.1, menghubungkan ke R3 KHI
-Ethernet 4: Terhubung ke jaringan 34.34.34.2, menghubungkan ke R1 KBJ
-# Router R3 KHI #
-Ethernet 2: Terhubung ke PC dengan subnet 192.168.8.1/24
-Ethernet 3: Terhubung ke jaringan 20.20.20.2, menghubungkan ke R2 CR
-Ethernet 4: Terhubung ke jaringan 23.23.23.2, menghubungkan ke R1 KBJ
+- **Router R1 (Kampus KJ)** - sebagai pusat jaringan
+- **Router R2 (Kampus CR)**
+- **Router R3 (Kampus KHI)**
 
-# Jaringan Antar-Router #
-Jaringan 23.23.23.0/24: Menghubungkan R1 KBJ dan R3 KHI
-Jaringan 20.20.20.0/24: Menghubungkan R2 CR dan R3 KHI
-Jaringan 34.34.34.0/24: Menghubungkan R1 KBJ dan R2 CR
+## Detail Konfigurasi
 
-# Konfigurasi RIP #
-Setiap router harus dikonfigurasi untuk mengenali jaringan langsung yang terhubung ke setiap interface-nya dan berbagi informasi routing melalui RIP.
+### Router R1 (Kampus KJ sebagai pusat)
+
+1. **Interface Ethernet 1**: Terhubung ke internet
+   - IP: `10.10.10.1/30`
+
+2. **Tunnel 1 (IPIP Tunnel)**: Menghubungkan R1 (KJ) dengan R2 (CR)
+   - IP Tunnel: `16.16.16.1/30`
+
+3. **Interface Ethernet 2**: Menghubungkan jaringan lokal di Kampus KJ
+   - IP: `192.168.70.1/24`
+   - Terhubung ke switch untuk mendistribusikan koneksi ke perangkat di jaringan internal Kampus KJ
+
+### Router R2 (Kampus CR)
+
+1. **Interface Ethernet 1**: Terhubung ke internet
+   - IP: `10.10.10.2/30`
+
+2. **Tunnel 1 (IPIP Tunnel)**: Menghubungkan R2 (CR) dengan R1 (KJ)
+   - IP Tunnel: `16.16.16.2/30`
+
+3. **Tunnel 2 (IPIP Tunnel)**: Menghubungkan R2 (CR) dengan R3 (KHI)
+   - IP Tunnel: `17.17.17.1/30`
+
+4. **Interface Ethernet 2**: Menghubungkan jaringan lokal di Kampus CR
+   - IP: `192.168.80.1/24`
+   - Terhubung ke switch untuk mendistribusikan koneksi ke perangkat di jaringan internal Kampus CR
+
+### Router R3 (Kampus KHI)
+
+1. **Interface Ethernet 1**: Terhubung ke internet
+   - IP: `15.15.15.2/24`
+
+2. **Tunnel 1 (IPIP Tunnel)**: Menghubungkan R3 (KHI) dengan R2 (CR)
+   - IP Tunnel: `17.17.17.2/30`
+
+3. **Interface Ethernet 2**: Menghubungkan jaringan lokal di Kampus KHI
+   - IP: `192.168.90.1/24`
+   - Terhubung ke switch untuk mendistribusikan koneksi ke perangkat di jaringan internal Kampus KHI
+
+
+## Koneksi Antar Router
+
+- **IPIP Tunnel** digunakan untuk menghubungkan router di masing-masing kampus melalui alamat IP tunnel. Tunnel ini memungkinkan setiap jaringan kampus untuk saling berkomunikasi melalui koneksi yang aman.
+- **Tunnel 16.16.16.0/30** menghubungkan router KJ (R1) dan router CR (R2).
+- **Tunnel 17.17.17.0/30** menghubungkan router CR (R2) dan router KHI (R3).
+
+
+## Subnet Lokal
+
+- **Kampus KJ**: `192.168.70.0/24`
+- **Kampus CR**: `192.168.80.0/24`
+- **Kampus KHI**: `192.168.90.0/24`
+
+Setiap subnet ini dihubungkan melalui switch ke perangkat-perangkat di masing-masing kampus.
+
+
+
 
