@@ -16,3 +16,5 @@ Mata Kuliah : Jaringan Komputer Lanjut
 4. Jelaskan menurut anda apa itu NAT?
    Jawab : Menurut saya, NAT (Network Address Translation) teknologi yang memungkinkan beberapa perangkat di dalam jaringan lokal untuk menggunakan satu alamat IP publik saat berkomunikasi dengan internet. Dengan menggunakan NAT, alamat IP privat dari perangkat-perangkat di jaringan lokal dapat disembunyikan, dan mereka semua bisa mengakses internet dengan alamat IP publik yang sama. Menurut saya, NAT ini sangat berguna dalam menghemat penggunaan alamat IP publik, karena tidak semua perangkat membutuhkan alamat IP publik yang unik. 
 
+CASED
+![alt text](image.png)
